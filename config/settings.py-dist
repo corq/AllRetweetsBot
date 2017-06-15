@@ -1,0 +1,67 @@
+# -*- coding: utf-8 -*-
+
+import os
+
+
+# Local time offset
+UTC_OFFSET = 0
+
+# Auth parameters
+API_KEY = ''
+API_SECRET = ''
+ACCESS_TOKEN = ''
+ACCESS_TOKEN_SECRET = ''
+
+# Bot user_id
+MY_ID = 0
+
+# Files
+OFFSET_FILE = 'offset'
+DB_FILE = 'base.db'
+BLACKLIST_USERS_FILE = os.path.join('config', 'blacklist_users')
+BLACKLIST_WORDS_FILE = os.path.join('config', 'blacklist_words')
+BACKUP_DIR = 'backup'
+
+# Words list to search for
+WORDS = ['#Twitter']
+
+# Interval between queries in seconds
+CHECK_INTERVAL = 60
+
+# Interval to sleep if a network/twitter error occurs
+SLEEP_ERROR_INTERVAL = 10
+
+# Logging options
+LOG_OPTIONS = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'standard': {
+           'format': '%(asctime)s %(levelname)s %(message)s'
+        },
+    },
+
+    'handlers': {
+        'hFile': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join('logs', 'log'),
+            'formatter': 'standard',
+            'when': 'midnight',
+        },
+        'hConsole': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+        },
+    },
+
+    'loggers': {
+        'logger': {
+            'handlers': ['hFile', 'hConsole'],
+            'level': 'INFO',
+            'propagate': True
+        },
+    }
+}
