@@ -6,6 +6,9 @@ __pycache__/
 logs/
 base.db
 offset
+config/blacklist_*
+config/settings.py
+
 *.bak
 
 # PyCharm files
