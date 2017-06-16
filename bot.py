@@ -197,7 +197,7 @@ def main():
     elif args.rebuild_retweets:
         rebuild_retweets()
     else:
-        logger.error('You must specify a parameter. See [./bot.py --help]')
+        parser.print_help()
         sys.exit()
 
 
