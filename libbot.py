@@ -420,11 +420,10 @@ class TWeather(threading.Thread):
                     val_weathercode = forecast_now[0].attrib['number']
 
                     logger.info('Forming a tweet and sending...')
-                    text = 'Погода на данный момент:\n\n'
-                    text += WEATHER_CODES[val_weathercode]
-                    text += ', %s градусов.' % val_temp
-                    text += '. Давление %d мм рт.ст.' % val_press
-                    text += '. Ветер %s, %d м/с.' % (WEATHER_CODES[val_winddir], val_windspeed)
+                    text = 'Погода на %s:\n\n' % forecast_now.attrib['from'][11:16]
+                    text += '%s, %s градусов.' % (WEATHER_CODES[val_weathercode], val_temp)
+                    text += ' Давление %d мм рт.ст.' % val_press
+                    text += '\nВетер %s, %d м/с.' % (WIND_DIRECTIONS[val_winddir], val_windspeed)
                     text += '\n\n#AllMagadanWeather'
 
                     weather_sent = False
@@ -438,12 +437,13 @@ class TWeather(threading.Thread):
                         else:
                             weather_sent = True
                     logger.info('Done')
+                    current_weather_checked = True
                 else:
                     logger.info('Weather already have been posted')
             else:
                 current_weather_checked = False
 
-            for i in range(0, CHECK_INTERVAL*10):
+            for i in range(0, 100):
                 if getattr(thth, 'stop_now', False):
                     stop_thread = True
                     break

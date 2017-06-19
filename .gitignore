@@ -4,6 +4,7 @@ __pycache__/
 
 # Project files
 logs/
+temp/
 base.db
 offset
 config/blacklist_*
