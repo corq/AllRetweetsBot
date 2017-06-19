@@ -1,5 +1,5 @@
 # AllRetweetsBot
-A simple Python bot for Twitter that retweets specified words and/or hashtags, saves the tweets into the database and tweet weekly stastistics.
+A simple Python bot for Twitter that retweets specified words and/or hashtags, saves the tweets into the database and tweet weekly stastistics. As secondary function, it tweets the local weather report every several hours.
 
 ## Installation
 ### Requirements
@@ -40,6 +40,12 @@ After installing Python and required modules you should rename configuration fil
    WORDS = ['#Twitter']
    ```
    It is just a list.
+5. Set right yr.no URLs accodring to your geographic place. Example:
+   ```
+   FORECAST_URL_HOUR = 'http://www.yr.no/place/Russia/Magadan/Magadan/forecast_hour_by_hour.xml'
+   FORECAST_URL = 'http://www.yr.no/place/Russia/Magadan/Magadan/forecast.xml'
+   ```
+   See http://om.yr.no/verdata/xml/.
    
 All other options you may leave as written in default configuration - the bot is going to work well.
 
