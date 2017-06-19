@@ -40,24 +40,31 @@ def start_bot():
     t_watcher.start()
     t_statsmaker = TStatsMaker('t_statsmaker', api)
     t_statsmaker.start()
+    t_weather = TWeather('t_weather', api)
 
     try:
         t_watcher.join()
         t_statsmaker.join()
+        t_weather.join()
     except KeyboardInterrupt:
         logger.info('KeyboardInterrupt exception caught')
 
         logger.info('Stopping TWatcher thread...')
         setattr(t_watcher, 'stop_now', True)
         while t_watcher.is_alive():
-            time.sleep(1)
+            time.sleep(0.1)
         logger.info('Done')
 
         logger.info('Stopping TStatsMaker thread...')
         setattr(t_statsmaker, 'stop_now', True)
         while t_statsmaker.is_alive():
-            time.sleep(1)
+            time.sleep(0.1)
         logger.info('Done')
+
+        logger.info(''Stopping TWeather thread...')
+        setattr(t_weather, 'stop_now', True)
+        while t_weather.is_alive():
+            time.sleep(0.1)
 
 
 def rebuild_retweets():

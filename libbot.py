@@ -3,9 +3,12 @@
 import datetime
 import logging
 import logging.config
+import math
 import sqlite3
 import threading
 import time
+import urllib.request
+import xml.etree.ElementTree as ET
 
 from config.settings import *
 
@@ -352,6 +355,93 @@ class TStatsMaker(threading.Thread):
                     week_day_checked = True
             else:
                 week_day_checked = False
+
+            for i in range(0, CHECK_INTERVAL*10):
+                if getattr(thth, 'stop_now', False):
+                    stop_thread = True
+                    break
+                time.sleep(0.1)
+
+
+class TWeather(threading.Thread):
+    """ This thread make and tweet weather information every 3 hour
+        and weather forecast once a day
+    """
+
+    def __init__(self, name, api):
+        super(TStatsMaker, self).__init__()
+        self.name = name
+        self.api = api
+
+    def run(self):
+        thth = threading.current_thread()
+
+        # Whether the weather is checked
+        current_weather_checked = False
+
+        stop_thread = False
+        while not stop_thread:
+            now = datetime.datetime.now()
+            if (now.hour % 3 == 0) and (now.minute == 0):
+                if not current_weather_checked:
+                    logger.info('Current time is %d:%d. Time to post weather' % (now.hour, now.minute))
+
+                    if not os.path.isdir(TEMP_DIR):
+                        os.mkdir(TEMP_DIR)
+
+                    logger.info('Loading weather data...')
+                    got_weather = False
+                    while not got_weather:
+                        try:
+                            with urllib.request.urlopen(FORECAST_URL_HOUR) as response:
+                                yr_xml = response.read()
+                        except:
+                            logger.error('Error. Will sleep for %d seconds and try again' % SLEEP_ERROR_INTERVAL)
+                            time.sleep(SLEEP_ERROR_INTERVAL)
+                        else:
+                            got_weather = True
+                            logger.info('Done')
+
+                    yr_xml_decoded = yr_xml.decode('utf-8')
+                    with open(os.path.join(TEMP_DIR, YR_HOUR_FILE), 'w') as f:
+                        f.write(yr_xml_decoded)
+
+                    tree = ET.parse(os.path.join(TEMP_DIR, YR_HOUR_FILE))
+                    root = tree.getroot()
+
+                    forecast_now = root.find('./forecast/tabular/time')
+
+                    val_temp = forecast_now[4].attrib['value']
+                    if not val_temp.startswith('-'):
+                        val_temp = '+' + val_temp
+                    val_press = math.floor(float(forecast_now[5].attrib['value']) * 0.75006)
+                    val_winddir = forecast_now[2].attrib['code']
+                    val_windspeed = float(forecast_now[3].attrib['mps'])
+                    val_weathercode = forecast_now[0].attrib['number']
+
+                    logger.info('Forming a tweet and sending...')
+                    text = 'Погода на данный момент:\n\n'
+                    text += WEATHER_CODES[val_weathercode]
+                    text += ', %s градусов.' % val_temp
+                    text += '. Давление %d мм рт.ст.' % val_press
+                    text += '. Ветер %s, %d м/с.' % (WEATHER_CODES[val_winddir], val_windspeed)
+                    text += '\n\n#AllMagadanWeather'
+
+                    weather_sent = False
+                    while not weather_sent:
+                        try:
+                            self.api.PostUpdate(text)
+                        except:
+                            logger.error(
+                                'Can\'t send tweet. Will sleep for %d seconds and try again' % SLEEP_ERROR_INTERVAL)
+                            time.sleep(SLEEP_ERROR_INTERVAL)
+                        else:
+                            weather_sent = True
+                    logger.info('Done')
+                else:
+                    logger.info('Weather already have been posted')
+            else:
+                current_weather_checked = False
 
             for i in range(0, CHECK_INTERVAL*10):
                 if getattr(thth, 'stop_now', False):
