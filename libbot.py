@@ -133,7 +133,7 @@ def log_tweet(res, reason):
 class TWatcher(threading.Thread):
     """ This thread searches for tweets containing certain keywords every CHECK_INTERVAL seconds
     """
-    
+
     def __init__(self, name, api):
         super(TWatcher, self).__init__()
         self.name = name
@@ -369,7 +369,7 @@ class TWeather(threading.Thread):
     """
 
     def __init__(self, name, api):
-        super(TStatsMaker, self).__init__()
+        super(TWeather, self).__init__()
         self.name = name
         self.api = api
 

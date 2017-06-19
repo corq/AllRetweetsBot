@@ -41,6 +41,7 @@ def start_bot():
     t_statsmaker = TStatsMaker('t_statsmaker', api)
     t_statsmaker.start()
     t_weather = TWeather('t_weather', api)
+    t_weather.start()
 
     try:
         t_watcher.join()
@@ -61,7 +62,7 @@ def start_bot():
             time.sleep(0.1)
         logger.info('Done')
 
-        logger.info(''Stopping TWeather thread...')
+        logger.info('Stopping TWeather thread...')
         setattr(t_weather, 'stop_now', True)
         while t_weather.is_alive():
             time.sleep(0.1)
