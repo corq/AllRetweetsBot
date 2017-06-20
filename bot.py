@@ -172,8 +172,9 @@ def rebuild_retweets():
         if m.id > offset:
             offset = m.id
 
+        utc_offset = int(-time.timezone / 3600)
         params = (time.strftime('%Y-%m-%d %H:%M:%S', datetime.datetime.timetuple(
-            datetime.datetime.strptime(m.created_at, '%a %b %d %H:%M:%S %z %Y') + datetime.timedelta(hours=UTC_OFFSET))),
+            datetime.datetime.strptime(m.created_at, '%a %b %d %H:%M:%S %z %Y') + datetime.timedelta(hours=utc_offset))),
                   str(m.retweeted_status.created_at),
                   m.retweeted_status.user.id, m.retweeted_status.user.screen_name, m.retweeted_status.user.name,
                   m.retweeted_status.id, m.retweeted_status.text)

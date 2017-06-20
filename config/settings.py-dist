@@ -3,9 +3,6 @@
 import os
 
 
-# Local time offset
-UTC_OFFSET = 0
-
 # Auth parameters
 API_KEY = ''
 API_SECRET = ''

@@ -13,13 +13,7 @@ pip3 install -r requirements.txt
 
 ### Configuration
 After installing Python and required modules you should rename configuration file `config/settings.py-dist` to `config/settings.py` and make following changes:
-1. Set your local UTC offset:
-   ```
-   # Local time offset
-   UTC_OFFSET = 0
-   ```
-   When collecting weekly statistics, the bot saves them to database using local time and that's why you may need to specify your UTC offset.
-2. Specify your Twitter API keys and tokens:
+1. Specify your Twitter API keys and tokens:
    ```
    # Auth parameters
    API_KEY = ''
@@ -28,19 +22,19 @@ After installing Python and required modules you should rename configuration fil
    ACCESS_TOKEN_SECRET = ''
    ```
    To get your keys you need to log in in Twitter and go to https://apps.twitter.com/
-3. Specify your bot's user_id:
+2. Specify your bot's user_id:
    ```
    # Bot user_id
    MY_ID = 0
    ```
    *For now I don't know how to get this ID automatically using python-twitter module. If I learn how to do it, I'll fix it and    remove this setting. Or, if you know how, you can make PR.*
-4. Specify the words or the hashtags the bot will search for:
+3. Specify the words or the hashtags the bot will search for:
    ```
    # Words list to search for
    WORDS = ['#Twitter']
    ```
    It is just a list.
-5. Set right yr.no URLs accodring to your geographic place. Example:
+4. Set right yr.no URLs accodring to your geographic place. Example:
    ```
    FORECAST_URL_HOUR = 'http://www.yr.no/place/Russia/Magadan/Magadan/forecast_hour_by_hour.xml'
    FORECAST_URL = 'http://www.yr.no/place/Russia/Magadan/Magadan/forecast.xml'
