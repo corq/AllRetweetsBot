@@ -171,7 +171,7 @@ class TWatcher(threading.Thread):
                     tweet_id INTEGER NOT NULL, tweet_text TEXT NOT NULL,
                     PRIMARY KEY (retweeted))''')
         cur.execute('''CREATE TABLE IF NOT EXISTS stats
-                    (date TEXT NOT NULL, followers TEXT NOT NULL, PRIMARY KEY (followers))''')
+                    (date TEXT NOT NULL, followers TEXT NOT NULL, PRIMARY KEY (date))''')
         conn.commit()
 
         stop_thread = False
@@ -268,7 +268,7 @@ class TStatsMaker(threading.Thread):
                     tweet_id INTEGER NOT NULL, tweet_text TEXT NOT NULL,
                     PRIMARY KEY (retweeted))''')
         cur.execute('''CREATE TABLE IF NOT EXISTS stats
-                    (date TEXT NOT NULL, followers TEXT NOT NULL, PRIMARY KEY (followers))''')
+                    (date TEXT NOT NULL, followers TEXT NOT NULL, PRIMARY KEY (date))''')
         conn.commit()
 
         # Whether the day of the week was checked
