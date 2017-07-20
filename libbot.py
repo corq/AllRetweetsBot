@@ -236,7 +236,8 @@ class TWatcher(threading.Thread):
                                       res.user.screen_name, res.user.name, res.id, res.text)
                             cur.execute('INSERT INTO retweets VALUES (?,?,?,?,?,?,?)', params)
                             conn.commit()
-                            logger.info('Saved to database')
+                            logger.info('Saved to database. Wait for a second...')
+                            time.sleep(1)
             else:
                 logger.info('No new tweets found')
 
