@@ -71,4 +71,3 @@ My contacts:
    
    Twitter: https://twitter.com/sgtStrom
    
-Or if you find this bot useful, you can donate some coins: 1VWrLBtTvZyfbB8XkNTcE9MH5nNX72Vcb
