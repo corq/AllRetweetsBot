@@ -339,6 +339,7 @@ class TStatsMaker(threading.Thread):
                             text += 'Отписавшихся: %d\n' % len(followers_removed)
                         text += '\nВсего ретвитов: %d\n' % len(res)
                         text += '\n#AllMagadanWeekly'
+                        logger.info('Stat data:\n' + text)
 
                         stats_sent = False
                         while not stats_sent:
@@ -426,14 +427,16 @@ class TWeather(threading.Thread):
                     text += ' Давление %d мм рт.ст.' % val_press
                     text += '\nВетер %s, %d м/с.' % (WIND_DIRECTIONS[val_winddir], val_windspeed)
                     text += '\n\n#AllMagadanWeather'
+                    logger.info('Weather data:\n' + text)
 
                     weather_sent = False
                     while not weather_sent:
                         try:
                             self.api.PostUpdate(text)
-                        except:
+                        except Exception as e:
                             logger.error(
                                 'Can\'t send tweet. Will sleep for %d seconds and try again' % SLEEP_ERROR_INTERVAL)
+                            logger.error('Exception details: {}'.format(e))
                             time.sleep(SLEEP_ERROR_INTERVAL)
                         else:
                             weather_sent = True
