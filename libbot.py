@@ -105,18 +105,6 @@ def log_tweet(res, reason):
         logger.info('\t[Text: %s]' % res.text)
 
         return True
-    elif reason == 'arabian_bot':
-        logger.info('\t[Skipping retweet by %s (%d)]' % (res.user.screen_name, res.user.id))
-        logger.info('\t[Reason: blocked arabian bot]')
-        logger.info('\t[Original tweet data:]')
-        logger.info('\t[Created: %s UTC]' % str(res.created_at))
-        logger.info('\t[User ID: %d]' % res.user.id)
-        logger.info('\t[User SN: %s]' % res.user.screen_name)
-        logger.info('\t[User Name: %s]' % res.user.name)
-        logger.info('\t[Tweet ID: %d]' % res.id)
-        logger.info('\t[Text: %s]' % res.text)
-
-        return True
     elif reason == 'valid_tweet':
         logger.info('\tCreated: %s UTC' % str(res.created_at))
         logger.info('\tUser ID: %d' % res.user.id)
@@ -211,13 +199,6 @@ class TWatcher(threading.Thread):
                         write_offset(offset_id)
                     elif len([x for x in blacklist_words if x in res.text]) > 0:
                         log_tweet(res, 'blacklisted_word')
-
-                        offset_id = res.id
-                        write_offset(offset_id)
-                    elif res.lang == 'ar':
-                        # Workaround against some arabian bots. No nationalism :)
-
-                        log_tweet(res, 'arabian_bot')
 
                         offset_id = res.id
                         write_offset(offset_id)
