@@ -436,8 +436,6 @@ class TWeather(threading.Thread):
                         except Exception as e:
                             logger.error(
                                 'Can\'t send tweet. Will sleep for %d seconds and try again' % SLEEP_ERROR_INTERVAL)
-                            logger.error('Exception details: {}'.format(e))
-                            logger.error('Tweet length: %d' % len(text))
                             time.sleep(SLEEP_ERROR_INTERVAL)
                         else:
                             weather_sent = True
