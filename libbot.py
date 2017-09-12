@@ -361,6 +361,7 @@ class TWeather(threading.Thread):
 
         # Whether the weather is checked
         current_weather_checked = False
+        forecast_checked = False
 
         stop_thread = False
         while not stop_thread:
@@ -426,6 +427,120 @@ class TWeather(threading.Thread):
                     logger.info('Weather already have been posted')
             else:
                 current_weather_checked = False
+
+            if (now.hour == 21) and (now.minute == 0):
+                if not forecast_checked:
+                    logger.info('Current time is %d:%d. Time to post weather forecast for the next day' % (now.hour, now.minute))
+
+                    if not os.path.isdir(TEMP_DIR):
+                        os.mkdir(TEMP_DIR)
+
+                    logger.info('Loading weather data...')
+                    got_weather = False
+                    while not got_weather:
+                        try:
+                            with urllib.request.urlopen(FORECAST_URL) as response:
+                                yr_xml = response.read()
+                        except:
+                            logger.error('Error. Will sleep for %d seconds and try again' % SLEEP_ERROR_INTERVAL)
+                            time.sleep(SLEEP_ERROR_INTERVAL)
+                        else:
+                            got_weather = True
+                            logger.info('Done')
+
+                    yr_xml_decoded = yr_xml.decode('utf-8')
+                    with open(os.path.join(TEMP_DIR, YR_FILE), 'w') as f:
+                        f.write(yr_xml_decoded)
+
+                    tree = ET.parse(os.path.join(TEMP_DIR, YR_FILE))
+                    root = tree.getroot()
+
+                    forecast_day = root.findall('./forecast/tabular/time[@period="2"]')[0]
+                    forecast_night = root.findall('./forecast/tabular/time[@period="0"]')[1]
+
+                    '''
+                    val_temp = forecast_now[4].attrib['value']
+                    if not val_temp.startswith('-'):
+                        val_temp = '+' + val_temp
+                    val_press = math.floor(float(forecast_now[5].attrib['value']) * 0.75006)
+                    val_winddir = forecast_now[2].attrib['code']
+                    val_windspeed = float(forecast_now[3].attrib['mps'])
+                    val_weathercode = forecast_now[0].attrib['number']
+
+                    logger.info('Forming a tweet and sending...')
+                    text = 'Погода на %s:\n\n' % forecast_now.attrib['from'][11:16]
+                    text += '%s, %s градусов.' % (WEATHER_CODES[val_weathercode], val_temp)
+                    text += ' Давление %d мм рт.ст.' % val_press
+                    text += '\nВетер %s, %d м/с.' % (WIND_DIRECTIONS[val_winddir], val_windspeed)
+                    text += '\n\n#AllMagadanWeather'
+                    logger.info('Weather data:\n' + text)
+                    '''
+
+                    tomorrow = now + datetime.timedelta(1)
+
+                    val_day_temp = forecast_day[4].attrib['value']
+                    if not val_day_temp.startswith('-'):
+                        val_day_temp = '+' + val_day_temp
+                    val_day_press = math.floor(float(forecast_day[5].attrib['value']) * 0.75006)
+                    val_day_winddir = forecast_day[2].attrib['code']
+                    val_day_windspeed = float(forecast_day[3].attrib['mps'])
+                    val_day_weathercode = forecast_day[0].attrib['number']
+
+                    logger.info('Forming a day forecast tweet and sending...')
+                    text = 'Прогноз погоды на завтра, {}.{}.{}.\n\n'.format(tomorrow.day + 1, tomorrow.month, tomorrow.year)
+                    text += 'Днем:\n'
+                    text += '%s, %s градусов.' % (WEATHER_CODES[val_day_weathercode], val_day_temp)
+                    text += ' Давление %d мм рт.ст.' % val_day_press
+                    text += '\nВетер %s, %d м/с.' % (WIND_DIRECTIONS[val_day_winddir], val_day_windspeed)
+                    text += '\n\n#AllMagadanDayForecast'
+                    logger.info('Weather data:\n' + text)
+
+                    weather_sent = False
+                    while not weather_sent:
+                        try:
+                            self.api.PostUpdate(text)
+                        except Exception as e:
+                            logger.error(
+                                'Can\'t send tweet. Will sleep for %d seconds and try again' % SLEEP_ERROR_INTERVAL)
+                            time.sleep(SLEEP_ERROR_INTERVAL)
+                        else:
+                            weather_sent = True
+                    logger.info('Done')
+
+                    val_night_temp = forecast_night[4].attrib['value']
+                    if not val_night_temp.startswith('-'):
+                        val_night_temp = '+' + val_night_temp
+                    val_night_press = math.floor(float(forecast_night[5].attrib['value']) * 0.75006)
+                    val_night_winddir = forecast_night[2].attrib['code']
+                    val_night_windspeed = float(forecast_night[3].attrib['mps'])
+                    val_night_weathercode = forecast_night[0].attrib['number']
+
+                    logger.info('Forming a night forecast tweet and sending...')
+                    text = 'Прогноз погоды на завтра, {}.{}.{}.\n\n'.format(tomorrow.day + 1, tomorrow.month, tomorrow.year)
+                    text += 'Ночью:\n'
+                    text += '%s, %s градусов.' % (WEATHER_CODES[val_night_weathercode], val_night_temp)
+                    text += ' Давление %d мм рт.ст.' % val_night_press
+                    text += '\nВетер %s, %d м/с.' % (WIND_DIRECTIONS[val_night_winddir], val_night_windspeed)
+                    text += '\n\n#AllMagadanNightForecast'
+                    logger.info('Weather data:\n' + text)
+
+                    weather_sent = False
+                    while not weather_sent:
+                        try:
+                            self.api.PostUpdate(text)
+                        except Exception as e:
+                            logger.error(
+                                'Can\'t send tweet. Will sleep for %d seconds and try again' % SLEEP_ERROR_INTERVAL)
+                            time.sleep(SLEEP_ERROR_INTERVAL)
+                        else:
+                            weather_sent = True
+                    logger.info('Done')
+
+                    forecast_checked = True
+                else:
+                    logger.info('Forecast already have been posted')
+            else:
+                forecast_checked = False
 
             for i in range(0, 100):
                 if getattr(thth, 'stop_now', False):
