@@ -28,8 +28,9 @@ def start_bot():
         try:
             api = twitter.Api(consumer_key=API_KEY, consumer_secret=API_SECRET,
                               access_token_key=ACCESS_TOKEN, access_token_secret=ACCESS_TOKEN_SECRET)
-        except:
+        except Exception as err:
             logger.error('An error occurred. Sleep for %d seconds and try again...' % SLEEP_ERROR_INTERVAL)
+            logger.error('Exception details: {}'.format(err))
             time.sleep(SLEEP_ERROR_INTERVAL)
         else:
             authed = True
@@ -103,8 +104,9 @@ def rebuild_retweets():
     try:
         api = twitter.Api(consumer_key=API_KEY, consumer_secret=API_SECRET,
                           access_token_key=ACCESS_TOKEN, access_token_secret=ACCESS_TOKEN_SECRET)
-    except:
-        logger.info('Can\'t connect to Twitter API. Exit')
+    except Exception as err:
+        logger.error('Can\'t connect to Twitter API. Exit')
+        logger.error('Exception detals: {}'.format(err))
         sys.exit()
     else:
         logger.info('Done')
@@ -222,8 +224,8 @@ if __name__ == '__main__':
 
     try:
         main()
-    except Exception as e:
+    except Exception as err:
         logger.error('Unknown exception.')
-        logger.error('Exception details: {}'.format(e))
+        logger.error('Exception details: {}'.format(err))
     else:
         logger.info('Thank you!')

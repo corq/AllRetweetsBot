@@ -143,8 +143,9 @@ class TWatcher(threading.Thread):
             while not got_offset:
                 try:
                     offset_id = self.api.GetSearch(term=query, count=10, result_type='recent')[0].id
-                except:
+                except Exception as err:
                     logger.error('An error occurred. Sleep for %d seconds and try again...' % SLEEP_ERROR_INTERVAL)
+                    logger.error('Exception details: {}'.format(err))
                     time.sleep(SLEEP_ERROR_INTERVAL)
                 else:
                     got_offset = True
@@ -170,8 +171,9 @@ class TWatcher(threading.Thread):
             while not made_search:
                 try:
                     results_tmp = self.api.GetSearch(term=query, since_id=offset_id)
-                except:
+                except Exception as err:
                     logger.error('An error occurred. Sleep for %d seconds and try again...' % SLEEP_ERROR_INTERVAL)
+                    logger.error('Exception details: {}'.format(err))
                     time.sleep(SLEEP_ERROR_INTERVAL)
                 else:
                     made_search = True
@@ -207,8 +209,9 @@ class TWatcher(threading.Thread):
 
                         try:
                             self.api.PostRetweet(res.id)
-                        except:
+                        except Exception as err:
                             logger.error('Can\'t retweet. Skipping')
+                            logger.error('Exception details: {}'.format(err))
                         else:
                             logger.info('Retweeted!')
                             offset_id = res.id
@@ -276,9 +279,10 @@ class TStatsMaker(threading.Thread):
                         while not got_followers:
                             try:
                                 followers = self.api.GetFollowerIDs(user_id=MY_ID, stringify_ids=True)
-                            except:
+                            except Exception as err:
                                 logger.error('Can\'t get followers list. Will sleep for %d seconds and try again'
                                              % SLEEP_ERROR_INTERVAL)
+                                logger.error('Exception details: {}'.format(err))
                                 time.sleep(SLEEP_ERROR_INTERVAL)
                             else:
                                 logger.info('Got followers list')
@@ -326,9 +330,10 @@ class TStatsMaker(threading.Thread):
                         while not stats_sent:
                             try:
                                 self.api.PostUpdate(text)
-                            except:
+                            except Exception as err:
                                 logger.error(
                                     'Can\'t send stats. Will sleep for %d seconds and try again' % SLEEP_ERROR_INTERVAL)
+                                logger.error('Exception details: {}'.format(err))
                                 time.sleep(SLEEP_ERROR_INTERVAL)
                             else:
                                 stats_sent = True
@@ -379,8 +384,9 @@ class TWeather(threading.Thread):
                         try:
                             with urllib.request.urlopen(FORECAST_URL_HOUR) as response:
                                 yr_xml = response.read()
-                        except:
+                        except Exception as err:
                             logger.error('Error. Will sleep for %d seconds and try again' % SLEEP_ERROR_INTERVAL)
+                            logger.error('Exception details: {}'.format(err))
                             time.sleep(SLEEP_ERROR_INTERVAL)
                         else:
                             got_weather = True
@@ -415,9 +421,10 @@ class TWeather(threading.Thread):
                     while not weather_sent:
                         try:
                             self.api.PostUpdate(text)
-                        except Exception as e:
+                        except Exception as err:
                             logger.error(
                                 'Can\'t send tweet. Will sleep for %d seconds and try again' % SLEEP_ERROR_INTERVAL)
+                            logger.error('Exception details: {}'.format(err))
                             time.sleep(SLEEP_ERROR_INTERVAL)
                         else:
                             weather_sent = True
@@ -441,8 +448,9 @@ class TWeather(threading.Thread):
                         try:
                             with urllib.request.urlopen(FORECAST_URL) as response:
                                 yr_xml = response.read()
-                        except:
+                        except Exception as err:
                             logger.error('Error. Will sleep for %d seconds and try again' % SLEEP_ERROR_INTERVAL)
+                            logger.error('Exception details: {}'.format(err))
                             time.sleep(SLEEP_ERROR_INTERVAL)
                         else:
                             got_weather = True
@@ -499,9 +507,10 @@ class TWeather(threading.Thread):
                     while not weather_sent:
                         try:
                             self.api.PostUpdate(text)
-                        except Exception as e:
+                        except Exception as err:
                             logger.error(
                                 'Can\'t send tweet. Will sleep for %d seconds and try again' % SLEEP_ERROR_INTERVAL)
+                            logger.error('Exception details: {}'.format(err))
                             time.sleep(SLEEP_ERROR_INTERVAL)
                         else:
                             weather_sent = True
@@ -528,9 +537,10 @@ class TWeather(threading.Thread):
                     while not weather_sent:
                         try:
                             self.api.PostUpdate(text)
-                        except Exception as e:
+                        except Exception as err:
                             logger.error(
                                 'Can\'t send tweet. Will sleep for %d seconds and try again' % SLEEP_ERROR_INTERVAL)
+                            logger.error('Exception details: {}'.format(err))
                             time.sleep(SLEEP_ERROR_INTERVAL)
                         else:
                             weather_sent = True
