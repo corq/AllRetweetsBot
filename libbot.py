@@ -497,12 +497,12 @@ class TWeather(threading.Thread):
                     val_day_weathercode = forecast_day[0].attrib['number']
 
                     logger.info('Forming a day forecast tweet and sending...')
-                    text = 'Прогноз погоды на завтра, {}.{}.{}.\n\n'.format(tomorrow.day + 1, tomorrow.month, tomorrow.year)
+                    text = 'Прогноз на {:02d}.{:02d}.{}.\n\n'.format(tomorrow.day, tomorrow.month, tomorrow.year)
                     text += 'Днем:\n'
                     text += '%s, %s градусов.' % (WEATHER_CODES[val_day_weathercode], val_day_temp)
                     text += ' Давление %d мм рт.ст.' % val_day_press
                     text += '\nВетер %s, %d м/с.' % (WIND_DIRECTIONS[val_day_winddir], val_day_windspeed)
-                    text += '\n\n#AllMagadanDayForecast'
+                    text += '\n\n#AllMagadanForecast'
                     logger.info('Weather data:\n' + text)
 
                     weather_sent = False
@@ -528,12 +528,12 @@ class TWeather(threading.Thread):
                     val_night_weathercode = forecast_night[0].attrib['number']
 
                     logger.info('Forming a night forecast tweet and sending...')
-                    text = 'Прогноз погоды на завтра, {}.{}.{}.\n\n'.format(tomorrow.day + 1, tomorrow.month, tomorrow.year)
+                    text = 'Прогноз на {:02d}.{:02d}.{}.\n\n'.format(tomorrow.day, tomorrow.month, tomorrow.year)
                     text += 'Ночью:\n'
                     text += '%s, %s градусов.' % (WEATHER_CODES[val_night_weathercode], val_night_temp)
                     text += ' Давление %d мм рт.ст.' % val_night_press
                     text += '\nВетер %s, %d м/с.' % (WIND_DIRECTIONS[val_night_winddir], val_night_windspeed)
-                    text += '\n\n#AllMagadanNightForecast'
+                    text += '\n\n#AllMagadanForecast'
                     logger.info('Weather data:\n' + text)
 
                     weather_sent = False
