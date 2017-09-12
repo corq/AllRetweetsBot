@@ -327,6 +327,7 @@ class TStatsMaker(threading.Thread):
                         logger.info('Stat data:\n' + text)
 
                         stats_sent = False
+                        logger.info('Tweet length: {}'.format(len(text)))
                         while not stats_sent:
                             try:
                                 self.api.PostUpdate(text)
@@ -418,6 +419,7 @@ class TWeather(threading.Thread):
                     logger.info('Weather data:\n' + text)
 
                     weather_sent = False
+                    logger.info('Tweet length: {}'.format(len(text)))
                     while not weather_sent:
                         try:
                             self.api.PostUpdate(text)
@@ -504,6 +506,7 @@ class TWeather(threading.Thread):
                     logger.info('Weather data:\n' + text)
 
                     weather_sent = False
+                    logger.info('Tweet length: {}'.format(len(text)))
                     while not weather_sent:
                         try:
                             self.api.PostUpdate(text)
@@ -534,6 +537,7 @@ class TWeather(threading.Thread):
                     logger.info('Weather data:\n' + text)
 
                     weather_sent = False
+                    logger.info('Tweet length: {}'.format(len(text)))
                     while not weather_sent:
                         try:
                             self.api.PostUpdate(text)
