@@ -1,5 +1,5 @@
 # AllRetweetsBot
-A simple Python bot for Twitter that retweets specified words and/or hashtags, saves the tweets into the database and tweet weekly stastistics. As secondary function, it tweets the local weather report every several hours.
+A simple Python bot for Twitter that retweets specified words and/or hashtags, saves the tweets into the database and tweet weekly stastistics. As secondary function, it tweets the local weather report every several hours and weather forecast once a day.
 
 ## Installation
 ### Requirements
