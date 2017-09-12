@@ -16,3 +16,6 @@ config/settings.py
 # PyCharm files
 .idea/
 
+# Other
+*.swp
+
