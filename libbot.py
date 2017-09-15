@@ -468,24 +468,6 @@ class TWeather(threading.Thread):
                     forecast_day = root.findall('./forecast/tabular/time[@period="2"]')[0]
                     forecast_night = root.findall('./forecast/tabular/time[@period="0"]')[1]
 
-                    '''
-                    val_temp = forecast_now[4].attrib['value']
-                    if not val_temp.startswith('-'):
-                        val_temp = '+' + val_temp
-                    val_press = math.floor(float(forecast_now[5].attrib['value']) * 0.75006)
-                    val_winddir = forecast_now[2].attrib['code']
-                    val_windspeed = float(forecast_now[3].attrib['mps'])
-                    val_weathercode = forecast_now[0].attrib['number']
-
-                    logger.info('Forming a tweet and sending...')
-                    text = 'Погода на %s:\n\n' % forecast_now.attrib['from'][11:16]
-                    text += '%s, %s градусов.' % (WEATHER_CODES[val_weathercode], val_temp)
-                    text += ' Давление %d мм рт.ст.' % val_press
-                    text += '\nВетер %s, %d м/с.' % (WIND_DIRECTIONS[val_winddir], val_windspeed)
-                    text += '\n\n#AllMagadanWeather'
-                    logger.info('Weather data:\n' + text)
-                    '''
-
                     tomorrow = now + datetime.timedelta(1)
 
                     val_day_temp = forecast_day[4].attrib['value']
