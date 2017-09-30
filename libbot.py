@@ -479,7 +479,7 @@ class TWeather(threading.Thread):
                     val_day_weathercode = forecast_day[0].attrib['number']
 
                     logger.info('Forming a day forecast tweet and sending...')
-                    text = 'Прогноз на {:02d}.{:02d}.{}.\n\n'.format(tomorrow.day, tomorrow.month, tomorrow.year)
+                    text = 'Прогноз на {:02d}.{:02d}\n\n'.format(tomorrow.day, tomorrow.month)
                     text += 'Днем:\n'
                     text += '%s, %s градусов.' % (WEATHER_CODES[val_day_weathercode], val_day_temp)
                     text += ' Давление %d мм рт.ст.' % val_day_press
@@ -510,7 +510,7 @@ class TWeather(threading.Thread):
                     val_night_weathercode = forecast_night[0].attrib['number']
 
                     logger.info('Forming a night forecast tweet and sending...')
-                    text = 'Прогноз на {:02d}.{:02d}.{}.\n\n'.format(tomorrow.day, tomorrow.month, tomorrow.year)
+                    text = 'Прогноз на {:02d}.{:02d}\n\n'.format(tomorrow.day, tomorrow.month)
                     text += 'Ночью:\n'
                     text += '%s, %s градусов.' % (WEATHER_CODES[val_night_weathercode], val_night_temp)
                     text += ' Давление %d мм рт.ст.' % val_night_press
