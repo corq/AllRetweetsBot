@@ -407,6 +407,12 @@ class TWeather(threading.Thread):
                         val_temp = '+' + val_temp
                     if int(val_temp) == 0:
                         val_temp = '0'
+                    if val_temp[-1] == '1':
+                        temp_lang = 'градус'
+                    elif val_temp[-1] in ('2', '3', '4'):
+                        temp_lang = 'градуса'
+                    else:
+                        temp_lang = 'градусов'
                     val_press = math.floor(float(forecast_now[5].attrib['value']) * 0.75006)
                     val_winddir = forecast_now[2].attrib['code']
                     val_windspeed = float(forecast_now[3].attrib['mps'])
@@ -414,7 +420,7 @@ class TWeather(threading.Thread):
 
                     logger.info('Forming a tweet and sending...')
                     text = 'Погода на %s:\n\n' % forecast_now.attrib['from'][11:16]
-                    text += '%s, %s градусов.' % (WEATHER_CODES[val_weathercode], val_temp)
+                    text += '%s, %s %s.' % (WEATHER_CODES[val_weathercode], val_temp, temp_lang)
                     text += ' Давление %d мм рт.ст.' % val_press
                     text += '\nВетер %s, %d м/с.' % (WIND_DIRECTIONS[val_winddir], val_windspeed)
                     text += '\n\n#AllMagadanWeather'
