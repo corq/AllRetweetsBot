@@ -405,6 +405,8 @@ class TWeather(threading.Thread):
                     val_temp = forecast_now[4].attrib['value']
                     if not val_temp.startswith('-'):
                         val_temp = '+' + val_temp
+                    if int(val_temp) == 0:
+                        val_temp = '0'
                     val_press = math.floor(float(forecast_now[5].attrib['value']) * 0.75006)
                     val_winddir = forecast_now[2].attrib['code']
                     val_windspeed = float(forecast_now[3].attrib['mps'])
