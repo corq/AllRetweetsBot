@@ -481,6 +481,17 @@ class TWeather(threading.Thread):
                     val_day_temp = forecast_day[4].attrib['value']
                     if not val_day_temp.startswith('-'):
                         val_day_temp = '+' + val_day_temp
+                    if not val_day_temp.startswith('-'):
+                        val_day_temp = '+' + val_day_temp
+                    if int(val_day_temp) == 0:
+                        val_day_temp = '0'
+                    if val_day_temp[-1] == '1':
+                        temp_lang = 'градус'
+                    elif val_day_temp[-1] in ('2', '3', '4'):
+                        temp_lang = 'градуса'
+                    else:
+                        temp_lang = 'градусов'
+
                     val_day_press = math.floor(float(forecast_day[5].attrib['value']) * 0.75006)
                     val_day_winddir = forecast_day[2].attrib['code']
                     val_day_windspeed = float(forecast_day[3].attrib['mps'])
@@ -489,7 +500,7 @@ class TWeather(threading.Thread):
                     logger.info('Forming a day forecast tweet and sending...')
                     text = 'Прогноз на {:02d}.{:02d}\n\n'.format(tomorrow.day, tomorrow.month)
                     text += 'Днем:\n'
-                    text += '%s, %s градусов.' % (WEATHER_CODES[val_day_weathercode], val_day_temp)
+                    text += '%s, %s %s.' % (WEATHER_CODES[val_day_weathercode], val_day_temp, temp_lang)
                     text += ' Давление %d мм рт.ст.' % val_day_press
                     text += '\nВетер %s, %d м/с.' % (WIND_DIRECTIONS[val_day_winddir], val_day_windspeed)
                     text += '\n\n#AllMagadanForecast'
@@ -512,6 +523,17 @@ class TWeather(threading.Thread):
                     val_night_temp = forecast_night[4].attrib['value']
                     if not val_night_temp.startswith('-'):
                         val_night_temp = '+' + val_night_temp
+                    if not val_night_temp.startswith('-'):
+                        val_night_temp = '+' + val_night_temp
+                    if int(val_night_temp) == 0:
+                        val_night_temp = '0'
+                    if val_night_temp[-1] == '1':
+                        temp_lang = 'градус'
+                    elif val_night_temp[-1] in ('2', '3', '4'):
+                        temp_lang = 'градуса'
+                    else:
+                        temp_lang = 'градусов'
+
                     val_night_press = math.floor(float(forecast_night[5].attrib['value']) * 0.75006)
                     val_night_winddir = forecast_night[2].attrib['code']
                     val_night_windspeed = float(forecast_night[3].attrib['mps'])
@@ -520,7 +542,7 @@ class TWeather(threading.Thread):
                     logger.info('Forming a night forecast tweet and sending...')
                     text = 'Прогноз на {:02d}.{:02d}\n\n'.format(tomorrow.day, tomorrow.month)
                     text += 'Ночью:\n'
-                    text += '%s, %s градусов.' % (WEATHER_CODES[val_night_weathercode], val_night_temp)
+                    text += '%s, %s %s.' % (WEATHER_CODES[val_night_weathercode], val_night_temp, temp_lang)
                     text += ' Давление %d мм рт.ст.' % val_night_press
                     text += '\nВетер %s, %d м/с.' % (WIND_DIRECTIONS[val_night_winddir], val_night_windspeed)
                     text += '\n\n#AllMagadanForecast'
